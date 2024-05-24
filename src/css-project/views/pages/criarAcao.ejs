@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Ação Social</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white px-8 py-6 rounded-lg m-4 shadow-md w-full max-w-4xl">
+      <h1 class="text-3xl font-bold text-center mb-6">
+        Cadastro de Nova Ação Social
+      </h1>
+
+      <form id="cadastroForm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="form-group mb-4">
+            <label for="nome" class="block mb-2 font-medium"
+              >Nome da Ação:</label
+            >
+            <input
+              type="text"
+              id="nome"
+              name="nome"
+              required
+              class="w-full px-3 py-2 border rounded-lg"
+            />
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="inicio" class="block mb-2 font-medium"
+              >Data de Início:</label
+            >
+            <input
+              type="date"
+              id="inicio"
+              name="inicio"
+              required
+              class="w-full px-3 py-2 border rounded-lg"
+            />
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="termino" class="block mb-2 font-medium"
+              >Data de Término:</label
+            >
+            <input
+              type="date"
+              id="termino"
+              name="termino"
+              required
+              class="w-full px-3 py-2 border rounded-lg"
+            />
+          </div>
+          <div class="form-group mb-4">
+            <label for="vagas" class="block mb-2 font-medium"
+              >Quantidade de Vagas:</label
+            >
+            <input
+              type="number"
+              id="vagas"
+              name="vagas"
+              required
+              class="w-full px-3 py-2 border rounded-lg"
+            />
+          </div>
+
+          <div class="form-group mb-4 md:col-span-2">
+            <label for="descricao" class="block mb-2 font-medium"
+              >Descrição:</label
+            >
+            <textarea
+              id="descricao"
+              name="descricao"
+              rows="5"
+              maxlength="200"
+              required
+              placeholder="Max. 200 caracteres"
+              class="w-full px-3 py-2 border rounded-lg"
+            ></textarea>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="estado" class="block mb-2 font-medium">Estado:</label>
+            <select
+              id="estado"
+              name="estado"
+              required
+              class="w-full px-3 py-2 border rounded-lg"
+            >
+              <option value="" disabled selected>Selecione um estado</option>
+              <option value="AC">AC - Acre</option>
+              <option value="AL">AL - Alagoas</option>
+              <option value="AP">AP - Amapá</option>
+              <option value="AM">AM - Amazonas</option>
+              <option value="BA">BA - Bahia</option>
+              <option value="CE">CE - Ceará</option>
+              <option value="DF">DF - Distrito Federal</option>
+              <option value="ES">ES - Espírito Santo</option>
+              <option value="GO">GO - Goiás</option>
+              <option value="MA">MA - Maranhão</option>
+              <option value="MT">MT - Mato Grosso</option>
+              <option value="MS">MS - Mato Grosso do Sul</option>
+              <option value="MG">MG - Minas Gerais</option>
+              <option value="PA">PA - Pará</option>
+              <option value="PB">PB - Paraíba</option>
+              <option value="PR">PR - Paraná</option>
+              <option value="PE">PE - Pernambuco</option>
+              <option value="PI">PI - Piauí</option>
+              <option value="RJ">RJ - Rio de Janeiro</option>
+              <option value="RN">RN - Rio Grande do Norte</option>
+              <option value="RS">RS - Rio Grande do Sul</option>
+              <option value="RO">RO - Rondônia</option>
+              <option value="RR">RR - Roraima</option>
+              <option value="SC">SC - Santa Catarina</option>
+              <option value="SP">SP - São Paulo</option>
+              <option value="SE">SE - Sergipe</option>
+              <option value="TO">TO - Tocantins</option>
+            </select>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="cidade" class="block mb-2 font-medium">Cidade:</label>
+            <input
+              type="text"
+              id="cidade"
+              name="cidade"
+              maxlength="50"
+              required
+              class="w-full px-3 py-2 border rounded-lg"
+            />
+          </div>
+        </div>
+
+        <div class="form-group my-4 flex justify-between">
+          <button
+            type="submit"
+            class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg mr-2"
+          >
+            Cadastrar Ação
+          </button>
+          <button
+            type="button"
+            onclick="window.location.href = '/social'"
+            class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-4 rounded-lg"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+    <script type="module">
+      import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+
+      let user = "";
+
+      // Obtenha o ID do usuário antes de enviar o formulário
+      function fetchUser() {
+        return fetch("/checkUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Success:", data.uid);
+            return data.uid;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            return null;
+          });
+      }
+
+      document
+        .getElementById("cadastroForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Evita o envio padrão do formulário
+
+          if (!user) {
+            user = await fetchUser();
+          }
+
+          if (!user) {
+            alert("Erro ao obter informações do usuário.");
+            return;
+          }
+
+          const formData = {
+            id: uuidv4(),
+            nome: document.getElementById("nome").value,
+            dataInicio: document.getElementById("inicio").value,
+            dataFim: document.getElementById("termino").value,
+            numeroVagas: parseInt(document.getElementById("vagas").value, 10),
+            descricao: document.getElementById("descricao").value,
+            estado: document.getElementById("estado").value,
+            cidade: document.getElementById("cidade").value,
+            pais: "Brasil",
+            idCriador: user,
+          };
+
+          fetch("/criarAcao/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Success:", data);
+              alert("Ação social cadastrada com sucesso!");
+              window.location.href = "/social"; // Redireciona após sucesso
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("Erro ao cadastrar ação social.");
+            });
+        });
+
+      fetchUser().then((uid) => {
+        user = uid;
+      });
+    </script>
+  </body>
+</html>
